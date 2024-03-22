@@ -1,10 +1,17 @@
-function App() {
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Product from "./pages/Product";
+import Category from "./pages/Category";
+import Navbar from "./components/Navbar";
 
+export default function App() {
   return (
-    <>
-      <h1 className='text-3xl text-9xl text-red-950 font-extrabold font-serif'>Hello World</h1>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route index element={<Home />} />
+        <Route path="/products" element={<Product />} />
+        <Route path="/categories" element={<Category />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
-
-export default App
