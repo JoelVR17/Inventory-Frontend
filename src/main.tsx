@@ -1,11 +1,33 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
-import App from './App.tsx'
-import Navbar from "./components/Navbar.tsx";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ErrorPage from "./ErrorPage.tsx";
+import Product from "./pages/Product.tsx";
+import Category from "./pages/Category.tsx";
+import Root from "./pages/Root.tsx";
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/products",
+    element: <Product />,
+  },
+  {
+    path: "/categories",
+    element: <Category />,
+  },
+  {
+    path: "*",
+    element: <ErrorPage />,
+  },
+]);
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-      <Navbar />
-      <App />
-  </React.StrictMode>,
-)
+    <RouterProvider router={router} />
+  </React.StrictMode>
+);

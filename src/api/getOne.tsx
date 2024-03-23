@@ -3,10 +3,9 @@ import axios from "axios";
 // Define the global URL
 const url = "http://www.inventory-cr.somee.com/api/";
 
-// Get all objects
-const getAll = async (type: string) => {
+const getOne = async (type: string, id: number) => {
   try {
-    const url_all = url + type;
+    const url_all = url + type + "/" + id;
     const response = await axios.get(url_all);
 
     return response;
@@ -18,4 +17,4 @@ const getAll = async (type: string) => {
   }
 };
 
-export default getAll;
+export default getOne;
