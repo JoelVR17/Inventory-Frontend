@@ -22,7 +22,7 @@ const Navbar: React.FC = () => {
 
   return (
     <header
-      className={`left-0 top-0 z-20 flex justify-center w-full items-center`}
+      className={`left-0 top-0 z-20 flex justify-center w-full items-center bg-background`}
     >
       <div className="container">
         <div className="relative -mx-4 flex items-center justify-between">
