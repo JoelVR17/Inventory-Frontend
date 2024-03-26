@@ -3,6 +3,7 @@ import getAll from "../api/getAll";
 import Navbar from "../components/Navbar";
 import getOne from "../api/getOne";
 import { Link } from "react-router-dom";
+import Modal from "../components/ModalFormProduct";
 
 // Types for Product
 interface Product {
@@ -15,6 +16,11 @@ interface Product {
 export default function Product() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<{ [key: number]: any }>({});
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleModal = () => {
+    setIsOpen(!isOpen);
+  };
 
   useEffect(() => {
     const getProductsDataRequest = async () => {
@@ -63,12 +69,19 @@ export default function Product() {
           <h2 className="sr-only">Products</h2>
 
           <div className="flex justify-end align-middle">
-            <Link
-              className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-              to="#"
-            >
-              Add
-            </Link>
+            <div>
+              <button
+                onClick={toggleModal}
+                className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+              >
+                Add
+              </button>
+              <Modal
+                isOpen={isOpen}
+                onClose={toggleModal}
+                titleHeader="Add Product"
+              />
+            </div>
           </div>
 
           {products.length === 0 ? (
@@ -122,7 +135,7 @@ export default function Product() {
                   </h4>
 
                   {categories[product.categoryId] && (
-                    <p className="mt-1 text-lg font-medium text-textSecond text-right mt-5">
+                    <p className="text-lg font-medium text-textSecond text-right mt-5">
                       {categories[product.categoryId].name}
                     </p>
                   )}
