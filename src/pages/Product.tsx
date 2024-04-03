@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import getAll from "../api/getAll";
 import Navbar from "../components/Navbar";
 import getOne from "../api/getOne";
-import { Link } from "react-router-dom";
 import Modal from "../components/ModalFormProduct";
+import SuccessAlert3 from "../components/utils/SuccessAlert3";
 
 // Types for Product
 interface Product {
@@ -17,9 +17,23 @@ export default function Product() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<{ [key: number]: any }>({});
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [mode, setMode] = useState<"add" | "edit">("add");
 
-  const toggleModal = () => {
-    setIsOpen(!isOpen);
+  const openAddModal = () => {
+    setIsOpen(true);
+    setMode("add");
+  };
+
+  const openEditModal = (product: Product) => {
+    setIsOpen(true);
+    setMode("edit");
+    setSelectedProduct(product);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+    setSelectedProduct(null);
   };
 
   useEffect(() => {
@@ -69,17 +83,27 @@ export default function Product() {
           <h2 className="sr-only">Products</h2>
 
           <div className="flex justify-end align-middle">
-            <div>
-              <button
-                onClick={toggleModal}
-                className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-              >
-                Add
-              </button>
+            <div className="w-full">
+              <div className="flex justify-between mb-10">
+                <SuccessAlert3 message="The item was added successful" />
+                <button
+                  onClick={openAddModal}
+                  className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                >
+                  Add
+                </button>
+              </div>
+
               <Modal
                 isOpen={isOpen}
-                onClose={toggleModal}
-                titleHeader="Add Product"
+                onClose={closeModal}
+                titleHeader={mode === "add" ? "Add Product" : "Edit Product"}
+                descriptionHeader={
+                  mode === "add"
+                    ? "Add poducts to Stock"
+                    : "Edit one stock's product"
+                }
+                selectedProduct={mode === "edit" ? selectedProduct : null}
               />
             </div>
           </div>
@@ -114,19 +138,11 @@ export default function Product() {
           ) : (
             <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
               {products.map((product, index) => (
-                <Link
+                <button
+                  onClick={() => openEditModal(product)}
                   key={index}
                   className="group bg-secondColor rounded p-7 shadow"
-                  to={`${product.productId}`}
                 >
-                  <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
-                    <img
-                      src="/img1.png"
-                      alt={product.name}
-                      className="h-full w-full object-cover
-                      object-center group-hover:opacity-75"
-                    />
-                  </div>
                   <h3 className="mt-4 text-xl font-bold text-textPrimary">
                     {product.name}
                   </h3>
@@ -139,7 +155,7 @@ export default function Product() {
                       {categories[product.categoryId].name}
                     </p>
                   )}
-                </Link>
+                </button>
               ))}
             </div>
           )}
